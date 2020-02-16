@@ -4,10 +4,10 @@ include mixins/_hotel
 block content
   
   .outer_wrapper
-    .hotel_wrapper
+    .hotel_wrapper    
       h2 Hotels
         a(href="/all") (see all):
-    
-      +hotel
+      //- each hotel in allHotels
+        +hotel(hotel)
     
     

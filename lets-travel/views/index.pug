@@ -7,7 +7,17 @@ block content
     .hotel_wrapper    
       h2 Hotels
         a(href="/all") (see all):
-      //- each hotel in allHotels
-        +hotel(hotel)
+      ul
+        each hotel in hotels
+          +hotel(hotel)
+    .country_wrapper
+      h2 Countries
+        a(href='/countries') (see all)
+      ul
+        each country in countries
+          li
+            a(href=`/countries/${country_id}`) #{country._id}
+            img(src=`/images/countries/${country._id}.jpg`)
+
     
     

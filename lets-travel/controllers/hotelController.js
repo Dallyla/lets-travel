@@ -101,14 +101,35 @@ exports.updateHotelPost = async (req, res, next) => {
     try {    
         const hotelID = req.params.hotelId;
         const hotel = await Hotel.findByIdAndUpdate(hotelID, req.body, {new:true});
-        console.log(req.body);
-        console.log(hotelID);
-        res.status(200).send("string");
+        //console.log(req.body);
+        //console.log(hotelID);
+        //res.status(200).send("string");
+        res.redirect(`/all/${hotelId}`);
     } catch(error) {
         next(error)
     }
 } 
 
+exports.deleteHotelGet = async (req, res, next) => {
+    try {
+    const hotelID = req.params.hotelId;
+    const hotel = await Hotel.findOne( {_id: hotelID } )
+    res.render('add_hotel', { title: 'Delete hotel', hotel });
+
+    } catch (error) {
+        next (error)
+    }
+}
+
+exports.deleteHotelPost = async (req, res, next) => {
+    try {
+        const hotelId = req.params.hotelId;
+        const hotel = await Hotel.findByIdAndRemove({ _id: hotelId });
+        res.redirect('/');
+    } catch (error) {
+        next (error)
+    }
+}
 
 
 

@@ -1,5 +1,6 @@
 const Hotel = require('../models/hotel')
 
+
 //exports.homePage = (req,res) => {
 //    res.render('index', { title: 'Lets travel' }); //renderiza um template com a resposta do servidor
 //}
@@ -58,4 +59,59 @@ exports.createHotelPost = async (req, res, next) => { //async pausa uma função
     }
     
 }
+
+exports.editRemoveGet = (req, res) => {
+    res.render('edit_remove', { title: 'Search for hotel to edit or remove'});
+}
+
+exports.editRemovePost = async (req, res, next) => {
+    try{
+        const hotelId = req.body.hotel_id || null;
+        const hotelName = req.body.hotel_name || null;
+
+        const hotelData = await Hotel.find({ $or: [
+            { _id: hotelId },
+            { hotel_name: hotelName }
+        ]}).collation({
+            locale: 'en', //procura resultados em inglês
+            strength : 2 // o label não vai ser case sensitive
+        });
+
+        if(hotelData.length > 0) {
+            res.render('hotel_detail', { title: 'Add / Remove Hotel', hotelData});
+            return
+        } else {
+            res.redirect('/admin/edit-remove')
+        }
+    } catch(errors){
+        next(errors)
+    }
+}
+
+exports.updateHotelGet = async (req, res, next) => {
+    try {
+        const hotel = await Hotel.findOne({ _id: req.params.hotelId });
+        res.render('add_hotel', { title: 'Update hotel', hotel });
+    } catch(error) {
+        next(error)
+    }
+}
+
+exports.updateHotelPost = async (req, res, next) => {
+    try {    
+        const hotelID = req.params.hotelId;
+        const hotel = await Hotel.findByIdAndUpdate(hotelID, req.body, {new:true});
+        console.log(req.body);
+        console.log(hotelID);
+        res.status(200).send("string");
+    } catch(error) {
+        next(error)
+    }
+} 
+
+
+
+
+
+
 //serve pra armazenar a lógica das rotas 

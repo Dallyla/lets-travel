@@ -18,7 +18,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 //set up mongoose conection
-mongoose.connect('mongodb://lets_travel_admin:123456abc@cluster0-shard-00-00-bpdjw.mongodb.net:27017,cluster0-shard-00-01-bpdjw.mongodb.net:27017,cluster0-shard-00-02-bpdjw.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority',{ useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://lets_travel_admin:123456abc@cluster0-shard-00-00-bpdjw.mongodb.net:27017,cluster0-shard-00-01-bpdjw.mongodb.net:27017,cluster0-shard-00-02-bpdjw.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority',{ 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true, 
+  useFindAndModify: false 
+});
 mongoose.Promise = global.Promise; //global.Promise permite usar todas as promisses nativas possíveis no ES6 sem ter que instalar um módulo npm
 mongoose.connection.on('error', (error) => console.error(error.message)); //checar erros de conexão .on é um método node que adiciona um event listener, que nesse caso vai 
 //escutar por erros, então se passa 'error' como o primeiro parâmetro e o segundo argumento é uma

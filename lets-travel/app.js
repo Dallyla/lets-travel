@@ -17,6 +17,11 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.use( (req, res, next) => {
+  res.locals.url = req.path
+  next();
+});
+
 //set up mongoose conection
 mongoose.connect('mongodb://lets_travel_admin:123456abc@cluster0-shard-00-00-bpdjw.mongodb.net:27017,cluster0-shard-00-01-bpdjw.mongodb.net:27017,cluster0-shard-00-02-bpdjw.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority',{ 
   useNewUrlParser: true, 

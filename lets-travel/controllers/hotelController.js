@@ -26,6 +26,7 @@ exports.homePageFilters = async (req, res, next) => {
             { $sample: { size: 9}}
         ]);
         res.render('index', { countries, hotels});
+        //res.json(countries)
         
     } catch(error){
         next(error)
@@ -128,6 +129,29 @@ exports.deleteHotelPost = async (req, res, next) => {
         res.redirect('/');
     } catch (error) {
         next (error)
+    }
+}
+
+exports.hotelDetail = async (req, res, next) => {
+    try {
+        const hotelParam = req.params.hotel;
+        const hotelData = await Hotel.find( {_id: hotelParam});
+        res.render('hotel_detail', { 
+            title: 'Lets Travel',
+            hotelData
+        })
+    } catch(error) {
+        next(error)
+    }
+}
+
+exports.hotelsByCountry = async (req, res, next) => {
+    try {
+        const countryParam = req.params.country
+        const countryList = await Hotel.find( { country: countryParam });
+        res.render('hotels_by_country', { title: `Browse by country: ${countryParam}`, countryList});
+    }catch(error) {
+        next(error)
     }
 }
 

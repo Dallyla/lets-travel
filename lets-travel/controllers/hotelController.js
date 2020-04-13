@@ -1,4 +1,18 @@
-const Hotel = require('../models/hotel')
+const Hotel = require('../models/hotel');
+const cloudinary = require('cloudinary');
+const multer = require('multer');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+})
+
+const storage = multer.discStorage({});
+
+const upload = multer({ storage });
+
+exports.upload = upload.single('image');
 
 
 //exports.homePage = (req,res) => {
@@ -17,15 +31,18 @@ exports.listAllHotels = async (req,res, next) => {
 
 exports.homePageFilters = async (req, res, next) => {
     try {
-        const hotels = await Hotel.aggregate([
+        //console.log(process.env.DB)
+        const hotels =  Hotel.aggregate([
             { $match: {available: true}},
             { $sample: { size: 9}}
         ]);
-        const countries = await Hotel.aggregate([
+        const countries =  Hotel.aggregate([
             { $group: { _id: '$country'}},
             { $sample: { size: 9}}
         ]);
-        res.render('index', { countries, hotels});
+
+        const [filteredCountries, filteredHotels] = await Promise.all([countries, hotels]);
+        res.render('index', { filteredCountries, filteredHotels});
         //res.json(countries)
         
     } catch(error){

@@ -32,6 +32,7 @@ mongoose.connect(process.env.DB, {
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
+mongoose.set('useCreateIndex', true);
 mongoose.Promise = global.Promise; //global.Promise permite usar todas as promisses nativas possíveis no ES6 sem ter que instalar um módulo npm
 mongoose.connection.on('error', (error) => console.error(error.message)); //checar erros de conexão .on é um método node que adiciona um event listener, que nesse caso vai 
 //escutar por erros, então se passa 'error' como o primeiro parâmetro e o segundo argumento é uma

@@ -31,7 +31,14 @@ const hotelSchema = new mongoose.Schema({
         type: Boolean,
         required: 'Availability is required'
     }
-}); //esse Schema vai mapear ou combinar com os dados dentro do banco de dados, logo vai definir como os dados do banco de dados serão construídos
+});
+
+hotelSchema.index({
+    hotel_name: 'text',
+    country: 'text'
+})
+
+//esse Schema vai mapear ou combinar com os dados dentro do banco de dados, logo vai definir como os dados do banco de dados serão construídos
 
 
 //export model

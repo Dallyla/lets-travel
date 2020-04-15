@@ -8,11 +8,26 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-const storage = multer.discStorage({});
+const storage = multer.diskStorage({});
 
 const upload = multer({ storage });
 
 exports.upload = upload.single('image');
+
+exports.pushToCloudinary = (req, res, next) => {
+    if(req.file) {
+        cloudinary.uploader.upload(req.file.path)
+        .then((result) => {
+            req.body.image = result.public_id;
+            next();
+        })
+        .catch(() => {
+            res.redirect('/admin/add');
+        })
+    } else {
+        next();
+    }
+}
 
 
 //exports.homePage = (req,res) => {
@@ -117,8 +132,8 @@ exports.updateHotelGet = async (req, res, next) => {
 
 exports.updateHotelPost = async (req, res, next) => {
     try {    
-        const hotelID = req.params.hotelId;
-        const hotel = await Hotel.findByIdAndUpdate(hotelID, req.body, {new:true});
+        const hotelId = req.params.hotelId;
+        const hotel = await Hotel.findByIdAndUpdate(hotelId, req.body, {new:true});
         //console.log(req.body);
         //console.log(hotelID);
         //res.status(200).send("string");
@@ -168,6 +183,24 @@ exports.hotelsByCountry = async (req, res, next) => {
         const countryList = await Hotel.find( { country: countryParam });
         res.render('hotels_by_country', { title: `Browse by country: ${countryParam}`, countryList});
     }catch(error) {
+        next(error)
+    }
+}
+
+exports.searchResults = async(req ,res, next) => {
+    try{
+        const searchQuery = req.body;
+        const parsedStars = parseInt(searchQuery.stars);
+        const parsedSort = parseInt(searchQuery.sort);
+        const searchData = await Hotel.aggregate([
+            { $match: { $text: {$search: `\"${searchQuery.destination}\"`}}},
+            { $match: { available: true, star_rating: { $gte: parsedStars} }}, //gte = greater than
+            { $sort: { cost_per_night: parsedSort }}
+        ])
+        res.json(searchData)
+        
+
+    } catch(error) {
         next(error)
     }
 }

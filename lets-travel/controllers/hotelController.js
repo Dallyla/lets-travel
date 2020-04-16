@@ -197,7 +197,8 @@ exports.searchResults = async(req ,res, next) => {
             { $match: { available: true, star_rating: { $gte: parsedStars} }}, //gte = greater than
             { $sort: { cost_per_night: parsedSort }}
         ])
-        res.json(searchData)
+        //res.json(searchData)
+        res.render('search_results', { title: 'Search results', searchQuery, searchData});
         
 
     } catch(error) {

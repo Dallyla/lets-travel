@@ -1,4 +1,4 @@
-mixin hotel(hotel)
+mixin hotel(hotel, searchQuery)
 
     .hotel
         .hotel_img
@@ -14,3 +14,13 @@ mixin hotel(hotel)
             p= `Star rating: ${hotel.star_rating}`
             p= `Country: ${hotel.country}`
             p= `Cost per night: $ ${hotel.cost_per_night}`
+        
+        if url === '/results'
+            .hotel_order_details
+                p= `Number of nights: ${searchQuery.duration}`
+                p= `Departure date: ${searchQuery.dateOfDeparture}`
+                - const costEach = searchQuery.duration * hotel.cost_per_night
+                - const totalCost = costEach * searchQuery.numberOfGuests
+                p= `Total per person $ ${costEach}`
+                hr
+                h3= `Total cost: $ ${totalCost}`

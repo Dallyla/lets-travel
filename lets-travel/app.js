@@ -11,12 +11,25 @@ const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 
+//For passport.js:
+const User = require('./models/user');
+const passport = require('passport');
+
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+//configue passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(User.createStrategy());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use( (req, res, next) => {
   res.locals.url = req.path

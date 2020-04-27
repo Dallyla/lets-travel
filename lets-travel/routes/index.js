@@ -35,7 +35,12 @@ router.post('/admin/:hotelId/delete', hotelController.deleteHotelPost);
 
 //USER routes
 router.get('/sign-up', userController.signUpGet);
-router.post('/sign-up', userController.signUpPost);
+router.post('/sign-up', 
+    userController.signUpPost,
+    userController.loginPost);
+router.get('/login', userController.loginGet);
+router.post('/login', userController.loginPost);
+router.get('/logout', userController.logout);
 
 
 

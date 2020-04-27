@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Passport = require('passport');
 
 //Express validator
 const { check, validationResult } = require("express-validator");
@@ -47,13 +48,24 @@ exports.signUpPost = [
                     console.log('error while registering!', err);
                     return next(err);
                 }
+                next();   //Move onto the loginPost after registering
             });
 
         }
 
     } 
-
-
-
-
 ]
+
+exports.loginGet = (req, res) => {
+    res.render('login', {title: 'Login to continue'});
+}
+
+exports.loginPost = Passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+});
+
+exports.logout = (req, res) => {
+    req.logout();
+    res.redirect('/');
+}

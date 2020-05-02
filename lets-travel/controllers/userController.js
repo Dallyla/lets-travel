@@ -62,10 +62,13 @@ exports.loginGet = (req, res) => {
 
 exports.loginPost = Passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/login'
+    successFlash: 'You are now logged in',
+    failureRedirect: '/login',
+    failureFlash: 'Login failed, please try again'
 });
 
 exports.logout = (req, res) => {
     req.logout();
+    req.flash('info', 'You are now logged out');
     res.redirect('/');
 }

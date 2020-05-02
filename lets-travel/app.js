@@ -11,6 +11,13 @@ const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 
+//For sessions
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+
+//For flash messages
+const flash = require('connect-flash');
+
 //For passport.js:
 const User = require('./models/user');
 const passport = require('passport');
@@ -22,6 +29,13 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.use(session({
+  secret: process.env.SECRET,
+  saveUninitialized: false,
+  resave: false,
+  store: new MongoStore({ mongooseConnection: mongoose.connection})
+}));
+
 //configue passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
@@ -31,10 +45,16 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+//Flash messages
+app.use(flash());
+
 app.use( (req, res, next) => {
   res.locals.url = req.path
+  res.locals.flash = req.flash(),
   next();
 });
+
+
 
 //set up mongoose conection
 mongoose.connect(process.env.DB, { 

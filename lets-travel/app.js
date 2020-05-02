@@ -49,8 +49,9 @@ passport.deserializeUser(User.deserializeUser());
 app.use(flash());
 
 app.use( (req, res, next) => {
-  res.locals.url = req.path
-  res.locals.flash = req.flash(),
+  res.locals.user = req.user;
+  res.locals.url = req.path;
+  res.locals.flash = req.flash();
   next();
 });
 

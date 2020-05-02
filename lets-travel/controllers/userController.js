@@ -72,3 +72,11 @@ exports.logout = (req, res) => {
     req.flash('info', 'You are now logged out');
     res.redirect('/');
 }
+
+exports.isAdmin = (req, res, next) => {
+    if(req.isAuthenticated() && req.user.isAdmin) {
+        next();
+        return;
+    }
+    res.redirect('/');
+}

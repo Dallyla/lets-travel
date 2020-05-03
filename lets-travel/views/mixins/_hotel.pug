@@ -36,7 +36,7 @@ mixin hotel(hotel, searchQuery)
                             button(type="submit") SEARCH!
 
         
-        if url === '/results'
+        if url === '/results' || url.startsWith('/confirmation/')
             .hotel_order_details
                 p= `Number of nights: ${searchQuery.duration}`
                 p= `Departure date: ${searchQuery.dateOfDeparture}`
@@ -45,3 +45,13 @@ mixin hotel(hotel, searchQuery)
                 p= `Total per person $ ${costEach}`
                 hr
                 h3= `Total cost: $ ${totalCost}`
+
+                - const query = `id=${hotel._id}&duration=${searchQuery.duration}&dateOfDeparture=${searchQuery.dateOfDeparture}&numberOfGuests=${searchQuery.numberOfGuests}`;
+                if url === '/results'
+                    a.button(href=`/confirmation/${query}`) Continue
+                else if url.startsWith('/confirmation/')
+                    if user
+                        a.button(href=`/order-placed/${query}`) Place your order!
+                    else
+                        a.button(href=`/login`) Please log in to order!
+                        

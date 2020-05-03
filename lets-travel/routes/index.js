@@ -36,12 +36,12 @@ router.get('/admin/edit-remove', hotelController.editRemoveGet);
 router.post('/admin/edit-remove', hotelController.editRemovePost);
 router.get('/admin/:hotelId/update', hotelController.updateHotelGet);
 router.post('/admin/:hotelId/update',
-hotelController.upload,
-hotelController.pushToCloudinary,
-hotelController.updateHotelPost);
+    hotelController.upload,
+    hotelController.pushToCloudinary,
+    hotelController.updateHotelPost);
 router.get('/admin/:hotelId/delete', hotelController.deleteHotelGet);
 router.post('/admin/:hotelId/delete', hotelController.deleteHotelPost);
-
+router.get('/admin/orders', userController.allOrders);
 
 //USER routes
 router.get('/sign-up', userController.signUpGet);
@@ -51,8 +51,8 @@ router.post('/sign-up',
 router.get('/login', userController.loginGet);
 router.post('/login', userController.loginPost);
 router.get('/logout', userController.logout);
-
-
-
+router.get('/confirmation/:data', userController.bookingConfirmation);
+router.get('/order-placed/:data', userController.orderPlaced);
+router.get('/my-account', userController.myAccount);
 
 module.exports = router;

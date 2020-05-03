@@ -14,7 +14,10 @@ html
               a(href="/sign-up") sign-up
             li
               a(href="/login") login 
+            
           else
+            li
+              a(href="/my-account") my bookings / account
             li
               a(href="/logout") logout (#{user.first_name})
       .search_nav   <!-- cria um diz com a classe .search_nav -->      
@@ -49,7 +52,7 @@ html
         - const values = Object.values(flash)
         - const keys = Object.keys(flash)
         if keys.length > 0
-          div(class=`message message_$ keys`)
+          div(class=`message message_${keys}`)
             span= values
             span.close_btn(onclick="this.parentNode.remove()") &times;
 
